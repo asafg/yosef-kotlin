@@ -1,0 +1,18 @@
+#!/bin/bash
+# Determine the directory where the script is located
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+parent_dir="$(dirname ${script_dir})"
+
+# load application secrets
+. "${parent_dir}/secrets/JWT"
+. "${parent_dir}/secrets/JDBC"
+
+# format spring-boot run arguments in a way we can somehow read...
+app_args="--app.jwt.secret=${JWT_SECRET}"
+
+mvn clean
+mvn spring-boot:run \
+  -Dspring-boot.run.arguments="\"${app_args}\""
+
+
+

@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: yosefdreams
+  datasource:
+    url: jdbc:mysql://localhost:3306/yosef?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
+      javax:
+        persistence:
+          schema-generation:
+            scripts:
+              action: create
+              create-target: build/schema.sql
+            create-source: metadata
+
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    root: INFO
+
+app:
+  jwt:
+    expiration:
+      milliseconds: 604800000

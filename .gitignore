@@ -1,0 +1,124 @@
+# Gradle files
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Mac OS X
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Local configuration files
+*.properties
+!gradle.properties
+!**/src/test/resources/application-test.properties
+
+# H2 database files
+*.h2.db
+*.lock.db
+
+# Application specific
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Spring Boot Actuator
+actuator/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Flyway migrations (uncomment if using Flyway)
+# /src/main/resources/db/migration/
+
+# Local development files
+*.swp
+*.swo
+*~
+
+# Build reports and logs
+build/reports/
+build/test-results/
+build/tmp/
+
+# Gradle wrapper properties
+!gradle/wrapper/gradle-wrapper.properties
+
+# Maven (if using Maven wrapper)
+.mvn/
+!mvnw
+!mvnw.cmd
+
+# JVM crash logs
+hs_err_pid*
+
+# IDE specific files (additional)
+.idea_modules/
+*.sublime-workspace
+*.sublime-project
+
+# Local NetBeans files
+nbproject/private/
+nbproject/build-impl.xml
+nbproject/project.properties
+nbproject/project.xml
+
+# VS Code specific
+.history/
+
+# JUnit test reports
+junit/
+
+# Dependency directories
+lib/
+libs/
+
+# VS Code Java specific files
+.classpath
+.factorypath
+.settings/
+
+# Spring Boot specific
+spring-boot-devtools.log
+
+# Logs
+logs/
+*.log.*
+
+# Application specific (add your own application specific ignores below)
