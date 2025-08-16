@@ -122,3 +122,11 @@ logs/
 *.log.*
 
 # Application specific (add your own application specific ignores below)
+
+# An experiment with AI, trying to make it
+# write 10,000 repeatbale text.
+# I am not sure which of us is manipulating the other one...
+# Whether it was I manipulating the AI, 
+# or was it the AI that manipulated me into thinking that I am the one
+# manipulating the AI...
+PlayingWithSamsMind.kt
