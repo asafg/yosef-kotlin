@@ -2,12 +2,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "3.2.5"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("io.spring.dependency-management") version "1.1.7"
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.spring") version "2.0.0"
     kotlin("plugin.jpa") version "2.0.0"
     kotlin("plugin.allopen") version "2.0.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    id("com.github.ben-manes.versions") version "0.52.0"
 }
 
 group = "org.yosefdreams"
@@ -26,6 +27,7 @@ repositories {
 val testcontainersVersion = "1.19.8"
 val mockkVersion = "1.13.10"
 val assertjVersion = "3.25.3"
+val kotlinxSerializationVersion = "1.6.3"
 
 dependencies {
     // Spring Boot Starters
@@ -35,12 +37,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     
     // Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
     
     // Database
-    runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("com.mysql:mysql-connector-j:8.3.0")
     
     // Development Only
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -65,7 +67,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     
     // H2 Database for testing
-    testRuntimeOnly("com.h2database:h2")
+    testRuntimeOnly("com.h2database:h2:2.2.224")
 }
 
 tasks.withType<KotlinCompile> {
