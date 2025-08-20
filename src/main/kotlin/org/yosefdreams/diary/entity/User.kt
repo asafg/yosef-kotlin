@@ -12,25 +12,36 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     val username: String,
+    
+    @Column(unique = true, nullable = false)
+    val email: String,
     
     @Column(nullable = false)
     var password: String,
     
-    @Column(nullable = false, unique = true)
-    val email: String,
+    @Column(nullable = false)
+    var name: String,
     
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = [JoinColumn(name = "user_id")])
     @Column(name = "role")
-    val roles: MutableSet<String> = mutableSetOf("USER"),
+    val roles: MutableSet<String> = mutableSetOf("ROLE_USER"),
     
-    @CreationTimestamp
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "reset_token")
+    var resetToken: String? = null,
     
-    @UpdateTimestamp
-    var updatedAt: LocalDateTime? = null,
+    @Column(name = "reset_token_creation_date")
+    var resetTokenCreationDate: LocalDateTime? = null,
     
     var isActive: Boolean = true
-)
+) {
+    fun addRole(role: String) {
+        roles.add(role)
+    }
+    
+    fun removeRole(role: String) {
+        roles.remove(role)
+    }
+}

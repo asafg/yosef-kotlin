@@ -1,4 +1,4 @@
-package org.yosefdreams.diary.config
+package org.yosefdreams.diary.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,13 +10,22 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
+    private val jwtRequestFilter: JwtRequestFilter
+) {
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
 
     @Bean
     @Throws(Exception::class)
@@ -26,35 +35,37 @@ class SecurityConfig {
 
     @Bean
     @Throws(Exception::class)
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf { it.disable() }
-            .cors { }
-            .authorizeHttpRequests { auth ->
-                auth.requestMatchers(
-                    "/api/auth/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html"
-                ).permitAll()
-                auth.anyRequest().authenticated()
+            .csrf { csrf -> csrf.disable() }
+            .exceptionHandling { exceptions -> 
+                exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint)
             }
-            .sessionManagement { session ->
+            .sessionManagement { session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            .authorizeHttpRequests { auth ->
+                auth.requestMatchers(
+                    "/api/auth/signin",
+                    "/api/auth/signup",
+                    "/api/auth/forgot-password",
+                    "/api/auth/change-password"
+                ).permitAll()
+                .anyRequest().authenticated()
+            }
 
+        // Add a filter to validate the tokens with every request
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
+        
         return http.build()
     }
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
         config.allowCredentials = true
-        config.addAllowedOrigin("http://localhost:3000") // Your Flutter frontend URL
+        config.addAllowedOriginPattern("*")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         source.registerCorsConfiguration("/**", config)

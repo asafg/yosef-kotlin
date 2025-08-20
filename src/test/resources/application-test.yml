@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+jwt:
+  secret: test-secret-key-1234567890-1234567890-1234567890
+  expiration-ms: 86400000
+  refresh-expiration-ms: 604800000
+
+mail:
+  host: localhost
+  port: 25
+  username: test@example.com
+  password: test
+  properties:
+    mail.smtp.auth: false
+    mail.smtp.starttls.enable: false
+    mail.transport.protocol: smtp
+
+frontend:
+  base-url: http://localhost:3000
+
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate: INFO
+    org.yosefdreams: DEBUG
+
+server:
+  port: 0  # Use random port for tests
+  servlet:
+    context-path: /

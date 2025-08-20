@@ -1,55 +1,45 @@
-package org.yosefdreams.diary
+package org.yosefdreams.diary.testutil
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.BeforeEach
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.http.MediaType
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.yosefdreams.diary.dto.LoginRequest
 import org.yosefdreams.diary.dto.SignupRequest
-import org.yosefdreams.diary.testconfig.TestApplication
 
-@SpringBootTest(classes = [TestApplication::class])
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-abstract class BaseIntegrationTest {
-
-    @Autowired
-    protected lateinit var mockMvc: MockMvc
-
-    @Autowired
-    protected lateinit var objectMapper: ObjectMapper
-
-    protected fun performLogin(email: String, password: String): ResultActions {
+object TestUtils {
+    
+    private val objectMapper = ObjectMapper()
+    
+    fun MockMvc.performLogin(email: String, password: String): ResultActions {
         val loginRequest = LoginRequest(email, password)
-        return mockMvc.perform(
+        return this.perform(
             MockMvcRequestBuilders.post("/api/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest))
         )
     }
-
-    protected fun performSignup(
+    
+    fun MockMvc.performSignup(
         username: String,
         email: String,
         password: String,
         name: String = "Test User"
     ): ResultActions {
         val signupRequest = SignupRequest(username, email, password, name)
-        return mockMvc.perform(
+        return this.perform(
             MockMvcRequestBuilders.post("/api/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(signupRequest))
         )
     }
-
-    @BeforeEach
-    fun setup() {
-        // Common setup for all tests
+    
+    inline fun <reified T> parseResponse(result: ResultActions): T {
+        val response = result.andReturn().response.contentAsString
+        return objectMapper.readValue(response)
     }
+    
+    fun toJson(obj: Any): String = objectMapper.writeValueAsString(obj)
 }
